@@ -1,0 +1,37 @@
+<p-cascadeselect
+  inputId="select_country"
+  [(ngModel)]="selectedLocation"
+  (ngModelChange)="onSelectChange()"
+  [loading]="loading"
+  [options]="continents"
+  optionLabel="city"
+  optionGroupLabel="name"
+  [optionGroupChildren]="['countries', 'cities']"
+  [style]="{ minWidth: '14rem' }"
+  [placeholder]="placeholder"
+  showClear="true"
+>
+  <ng-template #option let-option>
+    <div class="flex items-center">
+      @if (option.countries) {
+        <i class="pi pi-compass mr-2"></i>
+      } @else if (option.cities) {
+        @if (option.code) {
+          <img
+            src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png"
+            [class]="`flag flag-${option.code} mr-2`"
+            style="width: 18px"
+          />
+        } @else {
+          <i class="pi pi-globe mr-2"></i>
+        }
+      } @else if (option.city) {
+        <i class="pi pi-map-marker mr-2"></i>
+      }
+      <span>{{ option.name || option.city }}</span>
+    </div>
+  </ng-template>
+  <ng-template #triggericon>
+    <i class="pi pi-map"></i>
+  </ng-template>
+</p-cascadeselect>
