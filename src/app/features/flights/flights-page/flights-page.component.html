@@ -1,10 +1,7 @@
 <p-toolbar>
   <ng-template #start> search flights </ng-template>
   <ng-template #center class="flex-1">
-    <div class="flex flex-col items-center gap-4">
-      <div class="ml-35 w-full">
-        <p-button label="Filter" icon="pi pi-filter" (onClick)="filterFlights()"></p-button>
-      </div>
+    <div class="my-2 flex flex-col items-center gap-4">
       <div class="flex flex-col gap-4 sm:flex-row">
         <div>
           From:
@@ -31,20 +28,30 @@
         </div>
       </div>
       <div>
-        At Date: <p-datepicker [(ngModel)]="date" [minDate]="today" [iconDisplay]="'input'" [showIcon]="true" />
+        At Date:
+        <p-datepicker
+          [(ngModel)]="date"
+          [minDate]="today"
+          [iconDisplay]="'input'"
+          [showIcon]="true"
+          [showClear]="true"
+        />
       </div>
+      <p-button label="Filter" icon="pi pi-filter" (onClick)="filterFlights()"></p-button>
     </div>
   </ng-template>
   <ng-template #end>
     <p-iconfield iconPosition="left">
       <p-inputicon styleClass="pi pi-search" />
-      <input type="text" pInputText placeholder="Free Search" />
+      <input type="text" pInputText placeholder="Free Search" [disabled]="true" />
     </p-iconfield>
   </ng-template>
 </p-toolbar>
 
-<div>
-  @for (flight of flights; track $index) {
-    <div>{{ flight.origin.city }} to {{ flight.dest.city }}</div>
+<div class="card mx-25 mt-2">
+  @if (flights().length == 0) {
+    <div class="text-primary-600 pt-5 text-center">Oh no! We couldn't find a flight that matches your filter 😞</div>
+  } @else {
+    <app-flights-list [flights]="flights"></app-flights-list>
   }
 </div>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, signal, WritableSignal } from '@angular/core'
 import { ToolbarModule } from 'primeng/toolbar'
 import { ButtonModule } from 'primeng/button'
 import { FlightsApiService } from '@/app/core/services/flights-api.service'
@@ -12,6 +12,7 @@ import { IconFieldModule } from 'primeng/iconfield'
 import { InputIconModule } from 'primeng/inputicon'
 import { InputTextModule } from 'primeng/inputtext'
 import { DecimalPipe } from '@angular/common'
+import { FlightsListComponent } from '../flights-list/flights-list.component'
 
 @Component({
   selector: 'app-flights-page',
@@ -25,13 +26,14 @@ import { DecimalPipe } from '@angular/common'
     IconFieldModule,
     InputIconModule,
     InputTextModule,
-    DecimalPipe
+    DecimalPipe,
+    FlightsListComponent
   ],
   templateUrl: './flights-page.component.html',
   styleUrl: './flights-page.component.scss'
 })
 export class FlightsPageComponent {
-  flights: Flight[] = []
+  flights: WritableSignal<Flight[]> = signal([])
   rangeValues: number[] = [0, 30000]
   date: Date | undefined
   today = new Date()
@@ -40,7 +42,7 @@ export class FlightsPageComponent {
   selectedTarget: Location | null = null
 
   constructor(public flightApi: FlightsApiService) {
-    flightApi.getFlights().subscribe((flights) => (this.flights = flights))
+    flightApi.getFlights().subscribe((flights) => this.flights.set(flights))
   }
 
   setOrigin = (loc: Location | null) => {
@@ -59,6 +61,6 @@ export class FlightsPageComponent {
       maxPrice: this.rangeValues[1],
       date: this.date
     }
-    this.flightApi.getFlights(filter).subscribe((flights) => (this.flights = flights))
+    this.flightApi.getFlights(filter).subscribe((flights) => this.flights.set(flights))
   }
 }
