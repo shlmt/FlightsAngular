@@ -1,0 +1,10 @@
+<div class="fixed right-10 bottom-20" [ngClass]="{ hidden: !isChatOpen }">
+  <app-bot-chat></app-bot-chat>
+</div>
+
+<button
+  class="bg-primary fixed right-5 bottom-5 h-12 w-12 cursor-pointer rounded-full shadow"
+  (click)="toggleChatOpen()"
+>
+  <i class="pi pi-comments text-xl text-white"></i>
+</button>
