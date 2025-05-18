@@ -31,10 +31,15 @@
           <div class="flex flex-1 flex-col justify-between gap-6 md:flex-row md:items-center">
             <div class="flex flex-row items-start justify-between gap-2 md:flex-col">
               <div>
-                <span class="text-surface-500 dark:text-surface-400 text-sm font-medium">{{
-                  flight.dest.country
-                }}</span>
-                <div class="mt-2 text-lg font-medium">{{ flight.dest.city }}</div>
+                <span class="text-surface-500 dark:text-surface-400 text-sm font-medium">
+                  From: {{ flight.origin.city }}, {{ flight.origin.country }}
+                </span>
+                  @if (flight.stopover != null) {
+                    <span class="text-surface-600 text-sm">
+                     | via: {{ flight.stopover.city }}, {{ flight.stopover.country }}
+                    </span>
+                  }
+                <div class="mt-2 text-lg font-medium">To: {{ flight.dest.city }}, {{ flight.dest.country }}</div>
               </div>
               <div class="bg-surface-100 p-1" style="border-radius: 30px">
                 <div
@@ -89,10 +94,15 @@
             <div class="pt-6">
               <div class="products-start flex flex-row justify-between gap-2">
                 <div>
-                  <span class="text-surface-500 dark:text-surface-400 text-sm font-medium">{{
-                    flight.dest.country
-                  }}</span>
-                  <div class="mt-2 text-lg font-medium">{{ flight.dest.city }}</div>
+                  <span class="text-surface-500 dark:text-surface-400 text-sm font-medium">
+                    From: {{ flight.origin.city }}, {{ flight.origin.country }}
+                  </span>
+                  @if (flight.stopover != null) {
+                    <span class="text-surface-600 text-sm">
+                     | via: {{ flight.stopover.city }}, {{ flight.stopover.country }}
+                    </span>
+                  }
+                  <div class="mt-2 text-lg font-medium">To: {{ flight.dest.city }}, {{ flight.dest.country }}</div>
                 </div>
                 <div class="bg-surface-100 p-1" style="border-radius: 30px; height: 100%">
                   <div

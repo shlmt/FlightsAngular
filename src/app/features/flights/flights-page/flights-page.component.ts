@@ -11,8 +11,9 @@ import { DatePickerModule } from 'primeng/datepicker'
 import { IconFieldModule } from 'primeng/iconfield'
 import { InputIconModule } from 'primeng/inputicon'
 import { InputTextModule } from 'primeng/inputtext'
-import { DecimalPipe } from '@angular/common'
+import { DatePipe, DecimalPipe } from '@angular/common'
 import { FlightsListComponent } from '../flights-list/flights-list.component'
+import { SelectButton } from 'primeng/selectbutton'
 
 @Component({
   selector: 'app-flights-page',
@@ -27,7 +28,9 @@ import { FlightsListComponent } from '../flights-list/flights-list.component'
     InputIconModule,
     InputTextModule,
     DecimalPipe,
-    FlightsListComponent
+    FlightsListComponent,
+    SelectButton,
+    DatePipe
   ],
   templateUrl: './flights-page.component.html',
   styleUrl: './flights-page.component.scss'
@@ -41,8 +44,20 @@ export class FlightsPageComponent {
   selectedOrigin: Location | null = { city: 'Tel Aviv', country: 'Israel', continent: 'Asia', code: 'il' }
   selectedTarget: Location | null = null
 
+  stopType = 'Both'
+  stopOptions = [
+    { label: 'Direct', value: 'Direct' },
+    { label: 'With Stopover', value: 'With' },
+    { label: 'Both', value: 'Both' }
+  ]
+
+  isExpanded = true
+
   constructor(public flightApi: FlightsApiService) {
-    flightApi.getFlights().subscribe((flights) => this.flights.set(flights))
+    const filter: FlightFilter = {
+      origin: this.selectedOrigin
+    }
+    flightApi.getFlights(filter).subscribe((flights) => this.flights.set(flights))
   }
 
   setOrigin = (loc: Location | null) => {
@@ -59,7 +74,8 @@ export class FlightsPageComponent {
       dest: this.selectedTarget,
       minPrice: this.rangeValues[0],
       maxPrice: this.rangeValues[1],
-      date: this.date
+      date: this.date,
+      stopType: this.stopType
     }
     this.flightApi.getFlights(filter).subscribe((flights) => this.flights.set(flights))
   }

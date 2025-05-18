@@ -20,4 +20,5 @@ export interface FlightFilter {
   minPrice?: number
   maxPrice?: number
   date?: Date
+  stopType?: string
 }

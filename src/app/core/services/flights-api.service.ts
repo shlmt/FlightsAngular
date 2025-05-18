@@ -89,6 +89,16 @@ export class FlightsApiService {
               )
                 return false
             }
+            switch (filter.stopType) {
+              case 'With':
+                if (!f.stopover) return false
+                break
+              case 'Direct':
+                if (f.stopover) return false
+                break
+              default:
+                break
+            }
             return true
           })
         : this.MockFlights

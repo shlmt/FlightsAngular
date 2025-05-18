@@ -1,44 +1,73 @@
 <p-toolbar>
-  <ng-template #start> search flights </ng-template>
-  <ng-template #center class="flex-1">
-    <div class="my-2 flex flex-col items-center gap-4">
-      <div class="flex flex-col gap-4 sm:flex-row">
-        <div>
-          From:
-          <app-location-select
-            [placeholder]="'Choose Origin'"
-            [selectedLocation]="{ city: 'Tel Aviv', country: 'Israel', continent: 'Asia', code: 'il' }"
-            (onLocationSelected)="setOrigin($event)"
-          ></app-location-select>
-        </div>
-        <div>
-          To:
-          <app-location-select
-            [placeholder]="'Choose Target'"
-            (onLocationSelected)="setTarget($event)"
-          ></app-location-select>
-        </div>
-      </div>
-      <div class="mt-2 flex gap-2">
-        Cost Range:
-        <div class="flex items-center gap-3">
-          {{ rangeValues[0] | number: "1.0-0" }}
-          <p-slider [(ngModel)]="rangeValues" [range]="true" [step]="500" [min]="0" [max]="30000" styleClass="w-56" />
-          {{ rangeValues[1] | number: "1.0-0" }}
-        </div>
-      </div>
-      <div>
-        At Date:
-        <p-datepicker
-          [(ngModel)]="date"
-          [minDate]="today"
-          [iconDisplay]="'input'"
-          [showIcon]="true"
-          [showClear]="true"
-        />
-      </div>
-      <p-button label="Filter" icon="pi pi-filter" (onClick)="filterFlights()"></p-button>
+  <ng-template #start>
+    <div class="my-3 ml-4 flex flex-col">
+      <span class="mb-5">search flights</span>
+      <p-button
+        [icon]="isExpanded ? 'pi pi-caret-up' : 'pi pi-caret-down'"
+        severity="secondary"
+        (onClick)="isExpanded = !isExpanded"
+      ></p-button>
     </div>
+  </ng-template>
+  <ng-template #center class="flex-1">
+    @if (isExpanded) {
+      <div class="my-2 flex flex-col items-center gap-4">
+        <div class="flex flex-col gap-4 sm:flex-row">
+          <div>
+            From:
+            <app-location-select
+              [placeholder]="'Choose Origin'"
+              [selectedLocation]="{ city: 'Tel Aviv', country: 'Israel', continent: 'Asia', code: 'il' }"
+              (onLocationSelected)="setOrigin($event)"
+            ></app-location-select>
+          </div>
+          <div>
+            To:
+            <app-location-select
+              [placeholder]="'Choose Target'"
+              (onLocationSelected)="setTarget($event)"
+            ></app-location-select>
+          </div>
+        </div>
+        <div class="mt-2 flex gap-2">
+          Cost Range:
+          <div class="flex items-center gap-3">
+            {{ rangeValues[0] | number: "1.0-0" }}
+            <p-slider [(ngModel)]="rangeValues" [range]="true" [step]="500" [min]="0" [max]="30000" styleClass="w-56" />
+            {{ rangeValues[1] | number: "1.0-0" }}
+          </div>
+        </div>
+        <div>
+          At Date:
+          <p-datepicker
+            [(ngModel)]="date"
+            [minDate]="today"
+            [iconDisplay]="'input'"
+            [showIcon]="true"
+            [showClear]="true"
+          />
+        </div>
+        <div class="flex items-center gap-2">
+          with stopover? <p-selectbutton [(ngModel)]="stopType" [options]="stopOptions" size="small" />
+        </div>
+        <p-button label="Filter" icon="pi pi-filter" (onClick)="filterFlights()"></p-button>
+      </div>
+    } @else {
+      <div class="flex flex-col">
+        <span class="font-bold">Filtered By: </span>
+        @if (selectedOrigin) {
+          <span>From: {{ selectedOrigin.country }}, {{ selectedOrigin.city }}</span>
+        }
+        @if (selectedTarget) {
+          <span>To: {{ selectedTarget.country }}, {{ selectedTarget.city }}</span>
+        }
+        <span> Cost Range: {{ rangeValues[0] | number: "1.0-0" }} - {{ rangeValues[1] | number: "1.0-0" }} </span>
+        @if (date) {
+          <span>At Date: {{ date | date: "yyyy-MM-dd" }} </span>
+        }
+        <span> with stopover: {{ stopType }} </span>
+      </div>
+    }
   </ng-template>
   <ng-template #end>
     <p-iconfield iconPosition="left">
